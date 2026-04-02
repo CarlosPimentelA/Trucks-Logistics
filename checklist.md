@@ -1,7 +1,7 @@
 # ✅ Backend Checklist (Ready for Frontend)
 
 ## 🧩 1. Dominio (Base del sistema)
-- [] Entidades definidas:
+- [✔️] Entidades definidas:
   - [✔️] Truck  
   - [✔️] TruckType  
   - [✔️] Driver    

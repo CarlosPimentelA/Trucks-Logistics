@@ -1,5 +1,7 @@
 package com.trucks_logistics.Trucks.Logistics.drivers;
 
-public class DriverRepository {
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface DriverRepository extends JpaRepository<Driver, Long> {
 
 }

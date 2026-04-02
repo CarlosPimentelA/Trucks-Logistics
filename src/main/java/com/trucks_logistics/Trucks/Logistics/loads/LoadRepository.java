@@ -1,5 +1,7 @@
 package com.trucks_logistics.Trucks.Logistics.loads;
 
-public class LoadRepository {
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface LoadRepository extends JpaRepository<Load, Long> {
 
 }
