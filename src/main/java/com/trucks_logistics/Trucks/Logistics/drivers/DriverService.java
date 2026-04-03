@@ -56,4 +56,8 @@ public class DriverService implements IDriverService {
         return mapper.driverToDriverDTO(driverUpdate);
     }
 
+    @Override
+    public List<DriverDTO> getAvailableDrivers() {
+        return mapper.ListDriverToDTOs(driverRepository.findByDriverDisponibility(DriverDisponibility.DISPONIBLE));
+    }
 }
