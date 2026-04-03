@@ -31,9 +31,9 @@
   - [✔️] /driver
   - [✔️] /route
   - [✔️] /catalog
-- [ ] Controllers limpios (sin lógica)  
-- [ ] Services con lógica de negocio  
-- [ ] Repositories solo para DB  
+- [✔️] Controllers limpios (sin lógica)  
+- [✔️] Services con lógica de negocio  
+- [✔️] Repositories solo para DB  
 
 ---
 
@@ -52,6 +52,9 @@
 - [ ] Drivers:
   - [ ] Crear  
   - [ ] Listar  
+  - [ ] Obtener por ID
+  - [ ] Actualizar driver
+  - [ ] Eliminar driver 
   
 ---
 

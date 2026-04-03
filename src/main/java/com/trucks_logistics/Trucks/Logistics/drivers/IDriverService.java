@@ -1,0 +1,15 @@
+package com.trucks_logistics.Trucks.Logistics.drivers;
+
+import java.util.List;
+
+interface IDriverService {
+    public List<DriverDTO> getDrivers();
+
+    public DriverDTO getDriverById(Long id);
+
+    public void addDrivers(DriverDTO driver);
+
+    public void deleteDriverById(Long id);
+
+    public DriverDTO updateDriver(DriverDTO driver, Long id, DriverDisponibility disponibility);
+}
