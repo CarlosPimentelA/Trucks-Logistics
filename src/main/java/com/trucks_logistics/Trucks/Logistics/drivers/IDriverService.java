@@ -13,5 +13,7 @@ public interface IDriverService {
 
     public DriverDTO updateDriver(DriverDTO driver, Long id, DriverDisponibility disponibility);
 
+    public void updateDriverAvailability(Long id, DriverDisponibility disponibility);
+
     public List<DriverDTO> getAvailableDrivers();
 }

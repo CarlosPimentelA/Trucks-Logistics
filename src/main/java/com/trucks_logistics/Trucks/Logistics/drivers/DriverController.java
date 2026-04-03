@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -48,9 +49,17 @@ public class DriverController {
         return ResponseEntity.ok("Conductor agregado exitosamente");
     }
 
-    @PatchMapping
-    public ResponseEntity<String> updateDriver(@Validated @RequestBody DriverDTO driverDTO) {
-        driverService.addDrivers(driverDTO);
+    @PutMapping("/{id}/{disponibility}")
+    public ResponseEntity<String> updateDriver(@Validated @RequestBody DriverDTO driverDTO, @PathVariable Long id,
+            @PathVariable DriverDisponibility disponibility) {
+        driverService.updateDriver(driverDTO, id, disponibility);
         return ResponseEntity.ok("Conductor actualizado exitosamente");
+    }
+
+    @PatchMapping("/available/{id}/{disponibility}")
+    public ResponseEntity<String> updateDriverAvailability(@PathVariable Long id,
+            @PathVariable DriverDisponibility disponibility) {
+        driverService.updateDriverAvailability(id, disponibility);
+        return ResponseEntity.ok("Estado actualizado exitosamente");
     }
 }

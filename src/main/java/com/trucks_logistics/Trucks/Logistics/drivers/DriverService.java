@@ -60,4 +60,11 @@ public class DriverService implements IDriverService {
     public List<DriverDTO> getAvailableDrivers() {
         return mapper.ListDriverToDTOs(driverRepository.findByDriverDisponibility(DriverDisponibility.DISPONIBLE));
     }
+
+    @Override
+    public void updateDriverAvailability(Long id, DriverDisponibility disponibility) {
+        Driver driver = driverRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Conductor no encontrado"));
+        driver.setDriverDisponibility(disponibility);
+    }
 }
