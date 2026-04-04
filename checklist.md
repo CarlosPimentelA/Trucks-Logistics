@@ -41,20 +41,33 @@
 - [ ] Travels:
   - [ ] Crear  
   - [ ] Listar  
-  - [ ] Obtener por ID  
+  - [ ] Obtener por ID
+  - [ ] Actualizar travel
+  - [ ] Poner fecha de llegada
+  - [ ] Actualizar precio gasolina
+
 - [ ] Loads:
-  - [ ] Agregar a travel  
+  - [ ] Agregar a travel
   - [ ] Listar por travel  
   - [ ] Eliminar  
+  - [ ] Obtener por ID
+  - [ ] Actualizar cargas
+  - [ ] Obtener el viaje de la carga
+  - [ ] Listar cargas
+
 - [ ] Trucks:
   - [ ] Crear  
-  - [ ] Listar  
-- [ ] Drivers:
-  - [ ] Crear  
-  - [ ] Listar  
+  - [ ] Listar
   - [ ] Obtener por ID
-  - [ ] Actualizar driver
-  - [ ] Eliminar driver 
+  - [ ] Actualizar camion
+  - [ ] Eliminar camion
+    
+- [✔️] Drivers:
+  - [✔️] Crear  
+  - [✔️] Listar  
+  - [✔️] Obtener por ID
+  - [✔️] Actualizar driver
+  - [✔️] Eliminar driver 
   
 ---
 
