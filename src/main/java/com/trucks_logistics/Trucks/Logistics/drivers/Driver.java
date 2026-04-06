@@ -22,19 +22,19 @@ public class Driver {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 20)
     private String firstName;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 20)
     private String lastName;
 
-    @Column(unique = true, nullable = false)
+    @Column(unique = true, nullable = false, length = 13)
     private String DNI;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 15)
     private LicenseType licenseType;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(nullable = false, length = 15)
     private DriverDisponibility driverDisponibility;
 }

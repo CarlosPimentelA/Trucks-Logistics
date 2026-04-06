@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -14,6 +13,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/drivers")
@@ -44,13 +45,13 @@ public class DriverController {
     }
 
     @PostMapping
-    public ResponseEntity<String> addDriver(@Validated @RequestBody DriverDTO driverDTO) {
+    public ResponseEntity<String> addDriver(@Valid @RequestBody DriverDTO driverDTO) {
         driverService.addDrivers(driverDTO);
         return ResponseEntity.ok("Conductor agregado exitosamente");
     }
 
     @PutMapping("/{id}/{disponibility}")
-    public ResponseEntity<String> updateDriver(@Validated @RequestBody DriverDTO driverDTO, @PathVariable Long id,
+    public ResponseEntity<String> updateDriver(@Valid @RequestBody DriverDTO driverDTO, @PathVariable Long id,
             @PathVariable DriverDisponibility disponibility) {
         driverService.updateDriver(driverDTO, id, disponibility);
         return ResponseEntity.ok("Conductor actualizado exitosamente");

@@ -9,7 +9,7 @@ public class DriverMapper {
 
     public Driver driverDTOToDriver(DriverDTO driverDto) {
         Driver driver = new Driver();
-        driver.setDNI(driverDto.getDNI());
+        driver.setDNI(driverDto.getDni());
         driver.setFirstName(driverDto.getFirstName());
         driver.setLastName(driverDto.getLastName());
         driver.setLicenseType(driverDto.getLicenseType());

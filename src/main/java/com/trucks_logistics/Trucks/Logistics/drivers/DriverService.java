@@ -48,7 +48,7 @@ public class DriverService implements IDriverService {
         Driver driverUpdate = driverRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Conductor no encontrado"));
 
-        driverUpdate.setDNI(driverDTO.getDNI());
+        driverUpdate.setDNI(driverDTO.getDni());
         driverUpdate.setFirstName(driverDTO.getFirstName());
         driverUpdate.setLastName(driverDTO.getLastName());
         driverUpdate.setLicenseType(driverDTO.getLicenseType());
