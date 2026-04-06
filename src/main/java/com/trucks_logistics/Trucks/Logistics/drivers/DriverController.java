@@ -51,8 +51,9 @@ public class DriverController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<String> updateDriver(@Valid @RequestBody DriverDTO driverDTO, @PathVariable Long id) {
-        driverService.updateDriver(driverDTO, id);
+    public ResponseEntity<String> updateDriver(@Valid @RequestBody DriverUpdateDTO driverUpdateDTO,
+            @PathVariable Long id) {
+        driverService.updateDriver(driverUpdateDTO, id);
         return ResponseEntity.ok("Conductor actualizado exitosamente");
     }
 
@@ -62,4 +63,6 @@ public class DriverController {
         driverService.updateDriverAvailability(id, disponibility);
         return ResponseEntity.ok("Estado actualizado exitosamente");
     }
+
+    // TODO: Crear un ENDPOINT protegido que permita actualizar el DNI.
 }

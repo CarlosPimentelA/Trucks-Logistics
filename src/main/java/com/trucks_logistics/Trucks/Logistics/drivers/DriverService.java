@@ -44,20 +44,36 @@ public class DriverService implements IDriverService {
 
     @Override
     @Transactional
-    public DriverDTO updateDriver(DriverDTO driverDTO, Long id) {
+    public DriverDTO updateDriver(DriverUpdateDTO driverUpdateDTO, Long id) {
         Driver driverUpdate = driverRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Conductor no encontrado"));
 
-        driverUpdate.setFirstName(driverDTO.getFirstName());
-        if (driverDTO.getDni() != driverUpdate.getDNI()) {
-            driverUpdate.setDNI(driverDTO.getDni());
+        if (driverUpdateDTO.getDni() != null && !driverUpdateDTO.getDni().equals(driverUpdate.getDNI())) {
+
+            if (driverRepository.existsByDNI(driverUpdateDTO.getDni())) {
+                throw new IllegalArgumentException("El DNI ya esta registrado con otro conductor");
+            }
+            // TODO: Tener el DNI inmutable, crear un metodo que modifique el dni
+            // exclusivamente con todas las verificaciones posibles.
+            driverUpdate.setDNI(driverUpdateDTO.getDni());
         }
-        driverUpdate.setLastName(driverDTO.getLastName());
-        driverUpdate.setLicenseType(driverDTO.getLicenseType());
-        if (driverDTO.getDriverDisponibility() != null) {
-            driverUpdate.setDriverDisponibility(driverDTO.getDriverDisponibility());
+
+        if (driverUpdateDTO.getFirstName() != null) {
+            driverUpdate.setFirstName(driverUpdateDTO.getFirstName());
         }
-        driverUpdate.setDriverDisponibility(driverDTO.getDriverDisponibility());
+
+        if (driverUpdateDTO.getLastName() != null) {
+            driverUpdate.setLastName(driverUpdateDTO.getLastName());
+        }
+
+        if (driverUpdateDTO.getLicenseType() != null) {
+            driverUpdate.setLicenseType(driverUpdateDTO.getLicenseType());
+        }
+
+        if (driverUpdateDTO.getDriverDisponibility() != null) {
+            driverUpdate.setDriverDisponibility(driverUpdateDTO.getDriverDisponibility());
+        }
+
         driverRepository.save(driverUpdate);
         return mapper.driverToDriverDTO(driverUpdate);
     }
