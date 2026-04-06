@@ -13,6 +13,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class DriverDTO {
+    private Long id;
     @NotBlank(message = "El nombre es obligatorio")
     @Size(min = 2, max = 15, message = "Debe contener entre 2 y 15 caracteres!")
     private String firstName;
