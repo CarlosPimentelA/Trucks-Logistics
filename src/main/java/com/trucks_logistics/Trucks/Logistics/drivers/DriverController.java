@@ -50,10 +50,9 @@ public class DriverController {
         return ResponseEntity.ok("Conductor agregado exitosamente");
     }
 
-    @PutMapping("/{id}/{disponibility}")
-    public ResponseEntity<String> updateDriver(@Valid @RequestBody DriverDTO driverDTO, @PathVariable Long id,
-            @PathVariable DriverDisponibility disponibility) {
-        driverService.updateDriver(driverDTO, id, disponibility);
+    @PutMapping("/{id}")
+    public ResponseEntity<String> updateDriver(@Valid @RequestBody DriverDTO driverDTO, @PathVariable Long id) {
+        driverService.updateDriver(driverDTO, id);
         return ResponseEntity.ok("Conductor actualizado exitosamente");
     }
 

@@ -44,14 +44,21 @@ public class DriverService implements IDriverService {
 
     @Override
     @Transactional
-    public DriverDTO updateDriver(DriverDTO driverDTO, Long id, DriverDisponibility disponibility) {
+    public DriverDTO updateDriver(DriverDTO driverDTO, Long id) {
         Driver driverUpdate = driverRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Conductor no encontrado"));
 
         driverUpdate.setFirstName(driverDTO.getFirstName());
+        if (driverDTO.getDni() != driverUpdate.getDNI()) {
+            driverUpdate.setDNI(driverDTO.getDni());
+        }
         driverUpdate.setLastName(driverDTO.getLastName());
         driverUpdate.setLicenseType(driverDTO.getLicenseType());
-        driverUpdate.setDriverDisponibility(disponibility);
+        if (driverDTO.getDriverDisponibility() != null) {
+            driverUpdate.setDriverDisponibility(driverDTO.getDriverDisponibility());
+        }
+        driverUpdate.setDriverDisponibility(driverDTO.getDriverDisponibility());
+        driverRepository.save(driverUpdate);
         return mapper.driverToDriverDTO(driverUpdate);
     }
 

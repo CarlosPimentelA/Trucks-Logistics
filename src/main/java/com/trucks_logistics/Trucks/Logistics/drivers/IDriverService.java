@@ -11,7 +11,7 @@ public interface IDriverService {
 
     public void deleteDriverById(Long id);
 
-    public DriverDTO updateDriver(DriverDTO driver, Long id, DriverDisponibility disponibility);
+    public DriverDTO updateDriver(DriverDTO driver, Long id);
 
     public void updateDriverAvailability(Long id, DriverDisponibility disponibility);
 
