@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -14,6 +13,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/trucks")
@@ -44,13 +45,13 @@ public class TruckController {
     }
 
     @PostMapping
-    public ResponseEntity<String> addTruck(@Validated @RequestBody TruckDTO truckDto) {
+    public ResponseEntity<String> addTruck(@Valid @RequestBody TruckDTO truckDto) {
         truckService.addTruck(truckDto);
         return ResponseEntity.ok("Camion agregado exitosamente");
     }
 
     @PutMapping("/{id}/{disponibility}")
-    public ResponseEntity<String> updateTruck(@Validated @RequestBody TruckDTO truckDto, @PathVariable Long id,
+    public ResponseEntity<String> updateTruck(@Valid @RequestBody TruckDTO truckDto, @PathVariable Long id,
             @PathVariable TruckStatus status) {
         truckService.updateTruck(id, truckDto);
         return ResponseEntity.ok("Camion actualizado exitosamente");

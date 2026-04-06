@@ -27,7 +27,7 @@ public class Truck {
     private Long id;
     @Enumerated(EnumType.STRING)
     private TruckStatus truckStatus;
-    @Column(unique = true, nullable = false)
+    @Column(unique = true, nullable = false, length = 10)
     private String licensePlate;
     @ManyToOne
     @JoinColumn(name = "truck_type_id", nullable = false)
