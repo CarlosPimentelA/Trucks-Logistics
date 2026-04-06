@@ -57,7 +57,7 @@ public class TruckService implements ITruckService {
 
     @Override
     public List<TruckDTO> getAvailableTrucks() {
-        return mapper.ListTruckToTruckDTOs(truckRepository.findByTruckDisponibility(TruckStatus.LIBRE));
+        return mapper.ListTruckToTruckDTOs(truckRepository.findByTruckStatus(TruckStatus.LIBRE));
     }
 
     @Override
