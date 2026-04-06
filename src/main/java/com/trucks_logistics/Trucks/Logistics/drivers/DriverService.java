@@ -61,9 +61,11 @@ public class DriverService implements IDriverService {
     }
 
     @Override
+    @Transactional
     public void updateDriverAvailability(Long id, DriverDisponibility disponibility) {
         Driver driver = driverRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Conductor no encontrado"));
         driver.setDriverDisponibility(disponibility);
+        driverRepository.save(driver);
     }
 }
