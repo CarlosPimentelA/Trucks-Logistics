@@ -18,7 +18,7 @@ public class DriverMapper {
 
     public DriverDTO driverToDriverDTO(Driver driver) {
         DriverDTO driverDto = new DriverDTO(driver.getId(), driver.getFirstName(), driver.getLastName(),
-                driver.getDNI(), driver.getLicenseType());
+                driver.getDNI(), driver.getLicenseType(), driver.getDriverDisponibility());
         return driverDto;
     }
 

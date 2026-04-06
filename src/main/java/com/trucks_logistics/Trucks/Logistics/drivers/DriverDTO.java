@@ -28,4 +28,6 @@ public class DriverDTO {
 
     @NotNull(message = "La categoria de su licencia es obligatoria")
     private LicenseType licenseType;
+
+    private DriverDisponibility driverDisponibility;
 }
