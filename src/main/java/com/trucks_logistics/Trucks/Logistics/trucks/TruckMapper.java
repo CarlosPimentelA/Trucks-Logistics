@@ -8,7 +8,8 @@ import org.springframework.stereotype.Component;
 public class TruckMapper {
 
     public TruckDTO truckToTruckDTO(Truck truck) {
-        TruckDTO truckDto = new TruckDTO(truck.getTruckStatus(), truck.getLicensePlate(), truck.getTruckType());
+        TruckDTO truckDto = new TruckDTO(truck.getId(), truck.getTruckStatus(), truck.getLicensePlate(),
+                truck.getTruckType());
         return truckDto;
     }
 

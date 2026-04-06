@@ -15,6 +15,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TruckDTO {
+    private Long id;
     @NotNull(message = "El estado del camion es obligatorio")
     private TruckStatus truckStatus;
     @NotBlank(message = "La placa del vahiculo es obligatoria")
