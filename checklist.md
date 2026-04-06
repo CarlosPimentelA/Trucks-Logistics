@@ -48,19 +48,18 @@
 
 - [ ] Loads:
   - [ ] Agregar a travel
-  - [ ] Listar por travel  
-  - [ ] Eliminar  
   - [ ] Obtener por ID
   - [ ] Actualizar cargas
+  - [ ] Eliminar  
   - [ ] Obtener el viaje de la carga
   - [ ] Listar cargas
 
-- [ ] Trucks:
-  - [ ] Crear  
-  - [ ] Listar
-  - [ ] Obtener por ID
-  - [ ] Actualizar camion
-  - [ ] Eliminar camion
+- [✔️] Trucks:
+  - [✔️] Crear  
+  - [✔️] Listar
+  - [✔️] Obtener por ID
+  - [✔️] Actualizar camion
+  - [✔️] Eliminar camion
     
 - [✔️] Drivers:
   - [✔️] Crear  
