@@ -6,4 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface TruckRepository extends JpaRepository<Truck, Long> {
     List<Truck> findByTruckStatus(TruckStatus status);
+
+    boolean existsByLicensePlate(String licensePlate);
 }

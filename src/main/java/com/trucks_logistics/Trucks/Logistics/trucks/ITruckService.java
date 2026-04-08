@@ -10,7 +10,7 @@ public interface ITruckService {
 
     TruckDTO getTruckById(Long id);
 
-    TruckDTO updateTruck(Long id, TruckDTO truckDto);
+    TruckDTO updateTruck(Long id, TruckUpdateDTO truckUpdateDTO);
 
     void deleteTruck(Long id);
 

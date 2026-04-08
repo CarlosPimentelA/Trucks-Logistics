@@ -51,9 +51,9 @@ public class TruckController {
     }
 
     @PutMapping("/{id}/{disponibility}")
-    public ResponseEntity<String> updateTruck(@Valid @RequestBody TruckDTO truckDto, @PathVariable Long id,
+    public ResponseEntity<String> updateTruck(@Valid @RequestBody TruckUpdateDTO truckUpdateDTO, @PathVariable Long id,
             @PathVariable TruckStatus status) {
-        truckService.updateTruck(id, truckDto);
+        truckService.updateTruck(id, truckUpdateDTO);
         return ResponseEntity.ok("Camion actualizado exitosamente");
     }
 

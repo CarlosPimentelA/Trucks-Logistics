@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -36,7 +37,7 @@ public class GlobalExceptionHandler {
         // Aquí puedes ser más específico si quieres
         ErrorResponse error = new ErrorResponse(
                 HttpStatus.CONFLICT.value(),
-                "Error de integridad: El dato enviado ya existe o viola una restricción de la base de datos.",
+                ex.getMessage(),
                 System.currentTimeMillis());
         return new ResponseEntity<>(error, HttpStatus.CONFLICT);
     }
@@ -56,5 +57,14 @@ public class GlobalExceptionHandler {
                 ex.getMessage(),
                 System.currentTimeMillis());
         return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<ErrorResponse> handleMessageNotReadable(HttpMessageNotReadableException ex) {
+        ErrorResponse error = new ErrorResponse(
+                HttpStatus.BAD_REQUEST.value(),
+                "El cuerpo de la peticion es obligatorio",
+                System.currentTimeMillis());
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 }

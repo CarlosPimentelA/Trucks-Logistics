@@ -1,6 +1,4 @@
-package com.trucks_logistics.Trucks.Logistics.trucks;
-
-import com.trucks_logistics.Trucks.Logistics.catalogs.truck.TruckType;
+package com.trucks_logistics.Trucks.Logistics.catalogs.truck;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -9,8 +7,6 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,17 +15,23 @@ import lombok.Setter;
 @Entity
 @Setter
 @Getter
-@NoArgsConstructor
 @AllArgsConstructor
-public class Truck {
+@NoArgsConstructor
+public class TruckType {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(nullable = false, length = 20, unique = true)
     @Enumerated(EnumType.STRING)
-    private TruckStatus truckStatus;
-    @Column(unique = true, nullable = false, length = 10)
-    private String licensePlate;
-    @ManyToOne
-    @JoinColumn(name = "truck_type_id", nullable = false)
-    private TruckType truckType;
+    private TruckTypes category;
+
+    @Column(nullable = false, length = 75)
+    private String description;
+
+    @Column(nullable = false, length = 12)
+    private int capacityMax;
+
+    @Column(nullable = false, length = 15)
+    private float estimatedConsumption;
 }

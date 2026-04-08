@@ -37,13 +37,29 @@ public class TruckService implements ITruckService {
 
     @Override
     @Transactional
-    public TruckDTO updateTruck(Long id, TruckDTO truckDto) {
+    public TruckDTO updateTruck(Long id, TruckUpdateDTO truckUpdateDTO) {
         Truck truckUpdate = truckRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Camion no encontrado"));
-        truckUpdate.setLicensePlate(truckDto.getLicensePlate());
-        truckUpdate.setTruckStatus(truckDto.getTruckStatus());
-        truckUpdate.setTruckType(truckDto.getTruckType());
 
+        if (truckUpdateDTO.getLicensePlate() != null
+                && !truckUpdateDTO.getLicensePlate().equals(truckUpdate.getLicensePlate())) {
+            if (truckRepository.existsByLicensePlate(truckUpdateDTO.getLicensePlate())) {
+                throw new IllegalArgumentException("La placa ya esta registrada en otro camion");
+            }
+            // TODO: Tener la placa inmutable, crear un metodo que modifique la placa
+            // exclusivamente con todas las verificaciones posibles.
+            truckUpdate.setLicensePlate(truckUpdateDTO.getLicensePlate());
+        }
+
+        if (truckUpdateDTO.getTruckStatus() != null) {
+            truckUpdate.setTruckStatus(truckUpdateDTO.getTruckStatus());
+        }
+
+        if (truckUpdateDTO.getTruckType() != null) {
+            truckUpdate.setTruckType(truckUpdateDTO.getTruckType());
+        }
+
+        truckRepository.save(truckUpdate);
         return mapper.truckToTruckDTO(truckUpdate);
     }
 

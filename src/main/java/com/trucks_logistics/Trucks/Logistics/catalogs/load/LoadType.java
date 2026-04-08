@@ -1,4 +1,4 @@
-package com.trucks_logistics.Trucks.Logistics.catalogs;
+package com.trucks_logistics.Trucks.Logistics.catalogs.load;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
