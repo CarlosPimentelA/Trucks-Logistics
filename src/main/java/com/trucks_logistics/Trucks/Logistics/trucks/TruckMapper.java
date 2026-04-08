@@ -4,28 +4,24 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
+import com.trucks_logistics.Trucks.Logistics.catalogs.truck.TruckType;
+
 @Component
 public class TruckMapper {
 
-    public TruckDTO truckToTruckDTO(Truck truck) {
-        TruckDTO truckDto = new TruckDTO(truck.getId(), truck.getTruckStatus(), truck.getLicensePlate(),
-                truck.getTruckType());
-        return truckDto;
+    public TruckResponse toDTO(Truck truck) {
+        return new TruckResponse(truck.getId(), truck.getTruckStatus(), truck.getLicensePlate(), truck.getTruckType());
     }
 
-    public Truck truckDTOToTruck(TruckDTO truckDto) {
-        Truck truck = new Truck();
-        truck.setLicensePlate(truckDto.getLicensePlate());
-        truck.setTruckStatus(truckDto.getTruckStatus());
-        truck.setTruckType(truckDto.getTruckType());
-        return truck;
+    public Truck toEntity(TruckRequest request, TruckType truckType) {
+        return new Truck(
+                null,
+                request.getTruckStatus(),
+                request.getLicensePlate(),
+                truckType);
     }
 
-    public List<TruckDTO> ListTruckDTOToTruck(List<Truck> trucks) {
-        return trucks.stream().map(t -> this.truckToTruckDTO(t)).toList();
-    }
-
-    public List<TruckDTO> ListTruckToTruckDTOs(List<Truck> trucks) {
-        return trucks.stream().map(t -> this.truckToTruckDTO(t)).toList();
+    public List<TruckResponse> ListTruckToTruckDTOs(List<Truck> trucks) {
+        return trucks.stream().map(t -> this.toDTO(t)).toList();
     }
 }

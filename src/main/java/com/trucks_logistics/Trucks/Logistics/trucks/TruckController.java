@@ -24,17 +24,27 @@ public class TruckController {
     TruckService truckService;
 
     @GetMapping
-    public ResponseEntity<List<TruckDTO>> getTrucks() {
+    public ResponseEntity<List<TruckResponse>> getTrucks() {
         return ResponseEntity.ok(truckService.getTrucks());
     }
 
     @GetMapping("/available")
-    public ResponseEntity<List<TruckDTO>> getAvailableTrucks() {
+    public ResponseEntity<List<TruckResponse>> getAvailableTrucks() {
         return ResponseEntity.ok(truckService.getAvailableTrucks());
     }
 
+    @GetMapping("/in-use")
+    public ResponseEntity<List<TruckResponse>> getInUseTrucks() {
+        return ResponseEntity.ok(truckService.getInUseTrucks());
+    }
+
+    @GetMapping("/assigned")
+    public ResponseEntity<List<TruckResponse>> getAssignedTrucks() {
+        return ResponseEntity.ok(truckService.getAssignedTrucks());
+    }
+
     @GetMapping("/{id}")
-    public ResponseEntity<TruckDTO> getTruckById(@PathVariable Long id) {
+    public ResponseEntity<TruckResponse> getTruckById(@PathVariable Long id) {
         return ResponseEntity.ok(truckService.getTruckById(id));
     }
 
@@ -45,23 +55,22 @@ public class TruckController {
     }
 
     @PostMapping
-    public ResponseEntity<String> addTruck(@Valid @RequestBody TruckDTO truckDto) {
-        truckService.addTruck(truckDto);
+    public ResponseEntity<String> addTruck(@Valid @RequestBody TruckRequest request) {
+        truckService.addTruck(request);
         return ResponseEntity.ok("Camion agregado exitosamente");
     }
 
-    @PutMapping("/{id}/{disponibility}")
-    public ResponseEntity<String> updateTruck(@Valid @RequestBody TruckUpdateDTO truckUpdateDTO, @PathVariable Long id,
-            @PathVariable TruckStatus status) {
-        truckService.updateTruck(id, truckUpdateDTO);
+    @PutMapping("/{id}")
+    public ResponseEntity<String> updateTruck(@Valid @RequestBody TruckUpdateRequest truckUpdateRequest,
+            @PathVariable Long id) {
+        truckService.updateTruck(id, truckUpdateRequest);
         return ResponseEntity.ok("Camion actualizado exitosamente");
     }
 
-    @PatchMapping("/available/{id}/{disponibility}")
+    @PatchMapping("/{id}/{status}")
     public ResponseEntity<String> updateTruckAvailability(@PathVariable Long id,
             @PathVariable TruckStatus status) {
         truckService.updateTruckAvailability(id, status);
         return ResponseEntity.ok("Estado actualizado exitosamente");
     }
-
 }

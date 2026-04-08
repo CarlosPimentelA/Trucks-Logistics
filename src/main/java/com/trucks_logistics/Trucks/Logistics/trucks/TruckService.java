@@ -2,8 +2,10 @@ package com.trucks_logistics.Trucks.Logistics.trucks;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.trucks_logistics.Trucks.Logistics.catalogs.truck.TruckType;
+import com.trucks_logistics.Trucks.Logistics.catalogs.truck.TruckTypeRepository;
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
@@ -11,69 +13,94 @@ import jakarta.transaction.Transactional;
 @Service
 public class TruckService implements ITruckService {
 
-    @Autowired
-    TruckRepository truckRepository;
+    private final TruckRepository truckRepository;
+    private final TruckTypeRepository truckTypeRepository;
+    private final TruckMapper mapper;
 
-    @Autowired
-    TruckMapper mapper;
-
-    @Override
-    public TruckDTO addTruck(TruckDTO truckDto) {
-        Truck truck = mapper.truckDTOToTruck(truckDto);
-        truckRepository.save(truck);
-        return mapper.truckToTruckDTO(truck);
+    public TruckService(
+            TruckRepository truckRepository,
+            TruckTypeRepository truckTypeRepository,
+            TruckMapper mapper) {
+        this.truckRepository = truckRepository;
+        this.truckTypeRepository = truckTypeRepository;
+        this.mapper = mapper;
     }
 
     @Override
-    public List<TruckDTO> getTrucks() {
+    public TruckResponse addTruck(TruckRequest request) {
+
+        TruckType truckType = truckTypeRepository.findById(request.getTruckTypeId())
+                .orElseThrow(() -> new EntityNotFoundException("Tipo de camion inexistente"));
+
+        Truck truck = mapper.toEntity(request, truckType);
+
+        truck = truckRepository.save(truck);
+
+        return mapper.toDTO(truck);
+    }
+
+    @Override
+    public List<TruckResponse> getTrucks() {
         return mapper.ListTruckToTruckDTOs(truckRepository.findAll());
     }
 
     @Override
-    public TruckDTO getTruckById(Long id) {
-        return mapper.truckToTruckDTO(
+    public TruckResponse getTruckById(Long id) {
+        return mapper.toDTO(
                 truckRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Camion no encontrado")));
     }
 
     @Override
     @Transactional
-    public TruckDTO updateTruck(Long id, TruckUpdateDTO truckUpdateDTO) {
+    public TruckResponse updateTruck(Long id, TruckUpdateRequest truckUpdateRequest) {
         Truck truckUpdate = truckRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Camion no encontrado"));
 
-        if (truckUpdateDTO.getLicensePlate() != null
-                && !truckUpdateDTO.getLicensePlate().equals(truckUpdate.getLicensePlate())) {
-            if (truckRepository.existsByLicensePlate(truckUpdateDTO.getLicensePlate())) {
+        if (truckUpdateRequest.getLicensePlate() != null
+                && !truckUpdateRequest.getLicensePlate().equals(truckUpdate.getLicensePlate())) {
+            if (truckRepository.existsByLicensePlate(truckUpdateRequest.getLicensePlate())) {
                 throw new IllegalArgumentException("La placa ya esta registrada en otro camion");
             }
-            // TODO: Tener la placa inmutable, crear un metodo que modifique la placa
+            // TODO: Tener la placa inmutable, crear un ENDPOINT que modifique la placa
             // exclusivamente con todas las verificaciones posibles.
-            truckUpdate.setLicensePlate(truckUpdateDTO.getLicensePlate());
+            truckUpdate.setLicensePlate(truckUpdateRequest.getLicensePlate());
         }
 
-        if (truckUpdateDTO.getTruckStatus() != null) {
-            truckUpdate.setTruckStatus(truckUpdateDTO.getTruckStatus());
+        if (truckUpdateRequest.getTruckStatus() != null) {
+            truckUpdate.setTruckStatus(truckUpdateRequest.getTruckStatus());
         }
 
-        if (truckUpdateDTO.getTruckType() != null) {
-            truckUpdate.setTruckType(truckUpdateDTO.getTruckType());
+        if (truckUpdateRequest.getTruckTypeId() != null) {
+            TruckType truckType = truckTypeRepository.findById(truckUpdateRequest.getTruckTypeId())
+                    .orElseThrow(() -> new EntityNotFoundException("Tipo de camion inexistente"));
+
+            truckUpdate.setTruckType(truckType);
         }
 
         truckRepository.save(truckUpdate);
-        return mapper.truckToTruckDTO(truckUpdate);
+        return mapper.toDTO(truckUpdate);
     }
 
     @Override
     public void deleteTruck(Long id) {
-        if (!truckRepository.existsById(id)) {
-            throw new EntityNotFoundException("No se puede eliminar: Camion no encontrado");
-        }
-        truckRepository.deleteById(id);
+        Truck truck = truckRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("No se puede eliminar: Camion no encontrado"));
+        truckRepository.delete(truck);
     }
 
     @Override
-    public List<TruckDTO> getAvailableTrucks() {
+    public List<TruckResponse> getAvailableTrucks() {
         return mapper.ListTruckToTruckDTOs(truckRepository.findByTruckStatus(TruckStatus.LIBRE));
+    }
+
+    @Override
+    public List<TruckResponse> getInUseTrucks() {
+        return mapper.ListTruckToTruckDTOs(truckRepository.findByTruckStatus(TruckStatus.EN_USO));
+    }
+
+    @Override
+    public List<TruckResponse> getAssignedTrucks() {
+        return mapper.ListTruckToTruckDTOs(truckRepository.findByTruckStatus(TruckStatus.ASIGNADO));
     }
 
     @Override
@@ -81,6 +108,7 @@ public class TruckService implements ITruckService {
         Truck truck = truckRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Camion no encontrado"));
         truck.setTruckStatus(status);
+        truckRepository.save(truck);
     }
 
 }

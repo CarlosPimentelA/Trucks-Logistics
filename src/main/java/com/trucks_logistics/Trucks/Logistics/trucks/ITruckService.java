@@ -4,17 +4,21 @@ import java.util.List;
 
 public interface ITruckService {
 
-    TruckDTO addTruck(TruckDTO truckDto);
+    TruckResponse addTruck(TruckRequest request);
 
-    List<TruckDTO> getTrucks();
+    List<TruckResponse> getTrucks();
 
-    TruckDTO getTruckById(Long id);
+    TruckResponse getTruckById(Long id);
 
-    TruckDTO updateTruck(Long id, TruckUpdateDTO truckUpdateDTO);
+    TruckResponse updateTruck(Long id, TruckUpdateRequest truckUpdateRequest);
 
     void deleteTruck(Long id);
 
-    List<TruckDTO> getAvailableTrucks();
+    List<TruckResponse> getAvailableTrucks();
 
     void updateTruckAvailability(Long id, TruckStatus status);
+
+    public List<TruckResponse> getInUseTrucks();
+
+    public List<TruckResponse> getAssignedTrucks();
 }

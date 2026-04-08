@@ -3,6 +3,7 @@ package com.trucks_logistics.Trucks.Logistics.exceptions;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -10,6 +11,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import jakarta.persistence.EntityNotFoundException;
 
@@ -31,18 +33,22 @@ public class GlobalExceptionHandler {
 
     // Captura errores cuando el JSON está mal formado o faltan campos
 
-    @ExceptionHandler(org.springframework.dao.DataIntegrityViolationException.class)
-    public ResponseEntity<ErrorResponse> handleDataIntegrity(
-            org.springframework.dao.DataIntegrityViolationException ex) {
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<ErrorResponse> handleDataIntegrity(DataIntegrityViolationException ex) {
         // Aquí puedes ser más específico si quieres
+        String message = "Error de integridad de datos";
+
+        if (ex.getMessage().contains("license_type")) {
+            message = "La placa ya existe";
+        }
         ErrorResponse error = new ErrorResponse(
                 HttpStatus.CONFLICT.value(),
-                ex.getMessage(),
+                message,
                 System.currentTimeMillis());
         return new ResponseEntity<>(error, HttpStatus.CONFLICT);
     }
 
-    @ExceptionHandler(org.springframework.web.method.annotation.MethodArgumentTypeMismatchException.class)
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     public ResponseEntity<ErrorResponse> handleTypeMismatch(
             org.springframework.web.method.annotation.MethodArgumentTypeMismatchException ex) {
         String mensaje = String.format("El valor '%s' no es válido para el campo '%s'.", ex.getValue(), ex.getName());
