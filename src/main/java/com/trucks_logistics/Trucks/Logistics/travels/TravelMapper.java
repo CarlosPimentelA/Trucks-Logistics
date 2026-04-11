@@ -27,7 +27,7 @@ public class TravelMapper {
                 TruckMapper.toDTO(truck),
                 DriverMapper.driverToDriverDTO(driver),
                 RouteMapper.toDTO(route),
-                travel.getLoads().stream().map(LoadMapper::toDTO).toList());
+                loads.stream().map(LoadMapper::toDTO).toList());
 
         return response;
     }

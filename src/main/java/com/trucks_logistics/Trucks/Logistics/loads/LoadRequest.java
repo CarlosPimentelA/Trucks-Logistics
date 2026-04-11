@@ -20,6 +20,7 @@ public class LoadRequest {
     private LoadTypes loadType;
 
     @Positive(message = "El peso de la carga debe ser mayor a cero")
+    @NotNull(message = "El peso de la carga es obligatorio")
     private Double loadWeight;
 
     @NotBlank(message = "La descripción de la carga no puede estar vacía")

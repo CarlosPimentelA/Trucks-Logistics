@@ -80,17 +80,17 @@
 ---
 
 ## ❗ 6. Manejo de errores
-- [ ] Travel no encontrado → error claro  
+- [✔️] Travel no encontrado → error claro  
 - [ ] Truck capacity exceeded → error claro  
 - [ ] Driver no disponible → error claro  
-- [ ] Respuestas consistentes (status + mensaje)  
+- [✔️] Respuestas consistentes (status + mensaje)  
 
 ---
 
 ## 🔄 7. Flujo completo probado (MUY IMPORTANTE)
-- [ ] Crear truck  
-- [ ] Crear driver  
-- [ ] Crear route  
+- [✔️] Crear truck  
+- [✔️] Crear driver  
+- [✔️] Crear route  
 - [ ] Crear travel  
 - [ ] Agregar loads  
 - [ ] Intentar romper reglas (y ver errores)  
@@ -106,14 +106,14 @@
 ---
 
 ## 🧼 9. Código limpio
-- [ ] No hay lógica en controllers  
-- [ ] Métodos claros (`addLoad`, `assignTruck`, etc.)  
+- [✔️] No hay lógica en controllers  
+- [✔️] Métodos claros (`addLoad`, `assignTruck`, etc.)  
 - [ ] Sin código duplicado  
-- [ ] Nombres entendibles  
+- [✔️] Nombres entendibles  
 
 ---
 
 ## 🚀 10. Ready for Frontend (FINAL)
-- [ ] Puedes usar la API sin problemas desde Postman  
+- [✔️] Puedes usar la API sin problemas desde Postman  
 - [ ] Sabes exactamente qué endpoint usar para cada acción  
-- [ ] Las respuestas son claras y consistentes  
+- [✔️] Las respuestas son claras y consistentes  

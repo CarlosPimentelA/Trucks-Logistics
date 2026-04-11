@@ -18,7 +18,6 @@ public class TravelRequest {
     @FutureOrPresent(message = "La fecha de salida debe ser hoy o una fecha futura")
     private LocalDateTime departureDate;
 
-    @NotNull(message = "El estado del viaje es obligatorio")
     private TravelStatus travelStatus;
 
     @NotNull(message = "El combustible estimado es obligatorio")

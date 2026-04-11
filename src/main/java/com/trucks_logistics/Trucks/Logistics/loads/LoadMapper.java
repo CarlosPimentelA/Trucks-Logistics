@@ -6,7 +6,7 @@ public class LoadMapper {
 
     public static LoadResponse toDTO(Load load) {
         return new LoadResponse(
-                load.getTravel(),
+                load.getId(),
                 load.getLoadType(),
                 load.getLoadWeight(),
                 load.getLoadDescription());

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 
 @RestController
@@ -31,14 +32,14 @@ public class TravelController {
     }
 
     @PostMapping
-    public ResponseEntity<TravelResponse> create(@RequestBody TravelRequest request) {
+    public ResponseEntity<TravelResponse> create(@Valid @RequestBody TravelRequest request) {
         return ResponseEntity.ok(travelService.create(request));
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<TravelResponse> update(
             @PathVariable Long id,
-            @RequestBody TravelUpdateRequest request) {
+            @Valid @RequestBody TravelUpdateRequest request) {
         return ResponseEntity.ok(travelService.update(id, request));
     }
 
