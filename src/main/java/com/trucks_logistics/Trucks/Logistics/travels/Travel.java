@@ -55,7 +55,7 @@ public class Travel {
     @Column(nullable = false)
     private BigDecimal estimatedTotalCost;
 
-    @OneToMany(mappedBy = "travel", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "travel", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Load> loads = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -73,5 +73,10 @@ public class Travel {
     public void addLoad(Load load) {
         loads.add(load);
         load.setTravel(this);
+    }
+
+    public void removeLoad(Load load) {
+        loads.remove(load);
+        load.setTravel(null);
     }
 }

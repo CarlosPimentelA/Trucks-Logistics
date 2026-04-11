@@ -4,6 +4,8 @@ import com.trucks_logistics.Trucks.Logistics.travels.Travel;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -28,8 +30,9 @@ public class Load {
     @JoinColumn(name = "travel_id", nullable = false)
     private Travel travel;
 
-    @Column(nullable = false, length = 50)
-    private String loadType;
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private LoadTypes loadType;
 
     @Column(nullable = false)
     private double loadWeight;
