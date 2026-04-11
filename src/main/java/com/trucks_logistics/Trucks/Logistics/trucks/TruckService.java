@@ -15,15 +15,12 @@ public class TruckService implements ITruckService {
 
     private final TruckRepository truckRepository;
     private final TruckTypeRepository truckTypeRepository;
-    private final TruckMapper mapper;
 
     public TruckService(
             TruckRepository truckRepository,
-            TruckTypeRepository truckTypeRepository,
-            TruckMapper mapper) {
+            TruckTypeRepository truckTypeRepository) {
         this.truckRepository = truckRepository;
         this.truckTypeRepository = truckTypeRepository;
-        this.mapper = mapper;
     }
 
     @Override
@@ -32,21 +29,21 @@ public class TruckService implements ITruckService {
         TruckType truckType = truckTypeRepository.findById(request.getTruckTypeId())
                 .orElseThrow(() -> new EntityNotFoundException("Tipo de camion inexistente"));
 
-        Truck truck = mapper.toEntity(request, truckType);
+        Truck truck = TruckMapper.toEntity(request, truckType);
 
         truck = truckRepository.save(truck);
 
-        return mapper.toDTO(truck);
+        return TruckMapper.toDTO(truck);
     }
 
     @Override
     public List<TruckResponse> getTrucks() {
-        return mapper.ListTruckToTruckDTOs(truckRepository.findAll());
+        return TruckMapper.ListTruckToTruckDTOs(truckRepository.findAll());
     }
 
     @Override
     public TruckResponse getTruckById(Long id) {
-        return mapper.toDTO(
+        return TruckMapper.toDTO(
                 truckRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Camion no encontrado")));
     }
 
@@ -78,7 +75,7 @@ public class TruckService implements ITruckService {
         }
 
         truckRepository.save(truckUpdate);
-        return mapper.toDTO(truckUpdate);
+        return TruckMapper.toDTO(truckUpdate);
     }
 
     @Override
@@ -90,17 +87,17 @@ public class TruckService implements ITruckService {
 
     @Override
     public List<TruckResponse> getAvailableTrucks() {
-        return mapper.ListTruckToTruckDTOs(truckRepository.findByTruckStatus(TruckStatus.LIBRE));
+        return TruckMapper.ListTruckToTruckDTOs(truckRepository.findByTruckStatus(TruckStatus.LIBRE));
     }
 
     @Override
     public List<TruckResponse> getInUseTrucks() {
-        return mapper.ListTruckToTruckDTOs(truckRepository.findByTruckStatus(TruckStatus.EN_USO));
+        return TruckMapper.ListTruckToTruckDTOs(truckRepository.findByTruckStatus(TruckStatus.EN_USO));
     }
 
     @Override
     public List<TruckResponse> getAssignedTrucks() {
-        return mapper.ListTruckToTruckDTOs(truckRepository.findByTruckStatus(TruckStatus.ASIGNADO));
+        return TruckMapper.ListTruckToTruckDTOs(truckRepository.findByTruckStatus(TruckStatus.ASIGNADO));
     }
 
     @Override

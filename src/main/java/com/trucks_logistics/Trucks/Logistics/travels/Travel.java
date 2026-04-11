@@ -22,6 +22,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.PrePersist;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -44,7 +45,7 @@ public class Travel {
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private TravelStatus travelStatus;
+    private TravelStatus travelStatus = TravelStatus.PENDIENTE;
 
     @Column(nullable = false)
     private Double estimatedUsedFuel;
@@ -78,5 +79,12 @@ public class Travel {
     public void removeLoad(Load load) {
         loads.remove(load);
         load.setTravel(null);
+    }
+
+    @PrePersist
+    public void prePersist() {
+        if (this.travelStatus == null) {
+            this.travelStatus = TravelStatus.PENDIENTE;
+        }
     }
 }

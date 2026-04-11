@@ -13,23 +13,21 @@ public class DriverService implements IDriverService {
 
     @Autowired
     private DriverRepository driverRepository;
-    @Autowired
-    private DriverMapper mapper;
 
     @Override
     public List<DriverDTO> getDrivers() {
-        return mapper.ListDriverToDTOs(driverRepository.findAll());
+        return DriverMapper.ListDriverToDTOs(driverRepository.findAll());
     }
 
     @Override
     public DriverDTO getDriverById(Long id) {
-        return mapper.driverToDriverDTO(driverRepository.findById(id)
+        return DriverMapper.driverToDriverDTO(driverRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Conductor no encontrado")));
     }
 
     @Override
     public void addDrivers(DriverDTO driverDTO) {
-        Driver driver = mapper.driverDTOToDriver(driverDTO);
+        Driver driver = DriverMapper.driverDTOToDriver(driverDTO);
         driver.setDriverDisponibility(DriverDisponibility.DISPONIBLE);
         driverRepository.save(driver);
     }
@@ -75,12 +73,13 @@ public class DriverService implements IDriverService {
         }
 
         driverRepository.save(driverUpdate);
-        return mapper.driverToDriverDTO(driverUpdate);
+        return DriverMapper.driverToDriverDTO(driverUpdate);
     }
 
     @Override
     public List<DriverDTO> getAvailableDrivers() {
-        return mapper.ListDriverToDTOs(driverRepository.findByDriverDisponibility(DriverDisponibility.DISPONIBLE));
+        return DriverMapper
+                .ListDriverToDTOs(driverRepository.findByDriverDisponibility(DriverDisponibility.DISPONIBLE));
     }
 
     @Override
