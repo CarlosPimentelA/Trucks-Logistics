@@ -20,25 +20,21 @@ import lombok.AllArgsConstructor;
 public class TravelController {
     private final TravelService travelService;
 
-    // 📌 GET ALL
     @GetMapping
     public ResponseEntity<List<TravelResponse>> findAll() {
         return ResponseEntity.ok(travelService.findAll());
     }
 
-    // 📌 GET BY ID
     @GetMapping("/{id}")
     public ResponseEntity<TravelResponse> findById(@PathVariable Long id) {
         return ResponseEntity.ok(travelService.findById(id));
     }
 
-    // 📌 CREATE
     @PostMapping
     public ResponseEntity<TravelResponse> create(@RequestBody TravelRequest request) {
         return ResponseEntity.ok(travelService.create(request));
     }
 
-    // 📌 UPDATE
     @PutMapping("/{id}")
     public ResponseEntity<TravelResponse> update(
             @PathVariable Long id,
@@ -46,20 +42,17 @@ public class TravelController {
         return ResponseEntity.ok(travelService.update(id, request));
     }
 
-    // 📌 DELETE
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         travelService.delete(id);
         return ResponseEntity.noContent().build();
     }
 
-    // 📌 FILTER BY DRIVER
     @GetMapping("/driver/{driverId}")
     public ResponseEntity<List<TravelResponse>> findByDriver(@PathVariable Long driverId) {
         return ResponseEntity.ok(travelService.findByDriver(driverId));
     }
 
-    // 📌 FILTER BY TRUCK
     @GetMapping("/truck/{truckId}")
     public ResponseEntity<List<TravelResponse>> findByTruck(@PathVariable Long truckId) {
         return ResponseEntity.ok(travelService.findByTruck(truckId));
