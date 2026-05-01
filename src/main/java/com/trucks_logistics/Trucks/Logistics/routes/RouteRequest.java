@@ -16,11 +16,11 @@ import lombok.Setter;
 public class RouteRequest {
     @NotBlank(message = "El punto de partida es obligatorio")
     @Size(min = 4, max = 50, message = "Rango de caracteres: 4-50")
-    private String departurePoint;
+    private GeoLocation departurePoint;
 
     @NotBlank(message = "El destino es obligatorio")
     @Size(min = 4, max = 50, message = "Rango de caracteres: 4-50")
-    private String destination;
+    private GeoLocation destination;
 
     @NotNull(message = "La distancia recorrida estimada es obligatoria")
     @Positive(message = "La distancia debe de ser mayor a 0")

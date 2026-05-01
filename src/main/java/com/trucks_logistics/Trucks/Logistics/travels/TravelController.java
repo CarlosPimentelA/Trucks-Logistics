@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -57,5 +58,41 @@ public class TravelController {
     @GetMapping("/truck/{truckId}")
     public ResponseEntity<List<TravelResponse>> findByTruck(@PathVariable Long truckId) {
         return ResponseEntity.ok(travelService.findByTruck(truckId));
+    }
+
+    @PatchMapping("/status/{travelId}")
+    public ResponseEntity<String> updateCompleteStatus(@PathVariable Long travelId) {
+        travelService.completeTravelStatus(travelId);
+        return ResponseEntity.ok("Actualizado perfectamente!");
+    }
+
+    @PatchMapping("/status/{travelId}")
+    public ResponseEntity<String> updatePendingStatus(@PathVariable Long travelId) {
+        travelService.pendingTravelStatus(travelId);
+        return ResponseEntity.ok("Actualizado perfectamente");
+    }
+
+    @PatchMapping("/status/{travelId}")
+    public ResponseEntity<String> updateLoadingStatus(@PathVariable Long travelId) {
+        travelService.loadingTravelStatus(travelId);
+        return ResponseEntity.ok("Actualizado perfectamente");
+    }
+
+    @PatchMapping("/status/{travelId}")
+    public ResponseEntity<String> updateStartStatus(@PathVariable Long travelId) {
+        travelService.startTravelStatus(travelId);
+        return ResponseEntity.ok("Actualizado perfectamente");
+    }
+
+    @PatchMapping("/status/{travelId}")
+    public ResponseEntity<String> cancelStartStatus(@PathVariable Long travelId) {
+        travelService.cancelTravelStatus(travelId);
+        return ResponseEntity.ok("Actualizado perfectamente");
+    }
+
+    @PatchMapping("/status/{travelId}")
+    public ResponseEntity<String> stopStartStatus(@PathVariable Long travelId) {
+        travelService.stopTravelStatus(travelId);
+        return ResponseEntity.ok("Actualizado perfectamente");
     }
 }

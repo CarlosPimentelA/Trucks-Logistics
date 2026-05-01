@@ -28,23 +28,25 @@ public interface ITravelService {
     // --- GESTIÓN DE ESTADOS Y FLUJO LOGÍSTICO ---
 
     /** Inicia el viaje y valida que el camión no esté en otro viaje activo */
-    TravelResponse startTravel(Long id);
+    void startTravelStatus(Long id);
 
     /**
      * Finaliza el viaje y calcula la diferencia entre combustible estimado y real
      */
-    TravelResponse completeTravel(Long id, Double actualFuelUsed);
+    void completeTravelStatus(Long id);
 
     /** Cancela un viaje (solo si está PENDING) y libera al conductor y camión */
-    void cancelTravel(Long id, String reason);
+    void cancelTravelStatus(Long id);
+
+    void loadingTravelStatus(Long id);
+
+    void pendingTravelStatus(Long id);
+
+    void unloadingTravelStatus(Long id);
+
+    void stopTravelStatus(Long id);
 
     // --- GESTIÓN DE CARGA (Relación con Load) ---
-
-    /**
-     * Verifica si el peso total de las cargas no excede la capacidad del camión
-     * asignado
-     */
-    boolean validateCapacity(Long travelId);
 
     /** Obtiene el resumen de carga actual del viaje */
     Double getCurrentTotalWeight(Long travelId);

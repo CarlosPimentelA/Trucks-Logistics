@@ -22,10 +22,10 @@ public class Route {
     private Long id;
 
     @Column(nullable = false)
-    private String departurePoint;
+    private GeoLocation departurePoint;
 
     @Column(nullable = false)
-    private String destination;
+    private GeoLocation destination;
 
     @Column(nullable = false)
     @Positive(message = "La distancia debe de ser mayor a 0")

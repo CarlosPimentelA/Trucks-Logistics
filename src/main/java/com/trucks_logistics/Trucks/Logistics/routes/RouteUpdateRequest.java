@@ -10,7 +10,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class RouteUpdateRequest {
-    private String departurePoint;
-    private String destination;
+    private GeoLocation departurePoint;
+    private GeoLocation destination;
     private Double distanceKm;
 }

@@ -13,13 +13,32 @@ import com.trucks_logistics.Trucks.Logistics.trucks.TruckMapper;
 
 public class TravelMapper {
 
+    public static List<TravelResponse> toDTOList(List<Travel> travels) {
+
+        List<TravelResponse> response = travels.stream().map(t -> new TravelResponse(
+                t.getId(),
+                t.getDepartureDate(),
+                t.getArriveDate(),
+                t.getTravelStatus().name(),
+                t.getEstimatedUsedFuel(),
+                t.getCurrentFuelPrice(),
+                t.getEstimatedTotalCost(),
+                TruckMapper.toDTO(t.getTruck()),
+                DriverMapper.driverToDriverDTO(t.getDriver()),
+                RouteMapper.toDTO(t.getRoute()),
+                t.getLoads().stream().map(LoadMapper::toDTO).toList()))
+                .toList();
+
+        return response;
+    }
+
     public static TravelResponse toDTO(Travel travel, List<Load> loads, Driver driver, Truck truck, Route route) {
 
         TravelResponse response = new TravelResponse(
                 travel.getId(),
                 travel.getDepartureDate(),
                 travel.getArriveDate(),
-                travel.getTravelStatus().toString(),
+                travel.getTravelStatus().name(),
                 travel.getEstimatedUsedFuel(),
                 travel.getCurrentFuelPrice(),
                 travel.getEstimatedTotalCost(),

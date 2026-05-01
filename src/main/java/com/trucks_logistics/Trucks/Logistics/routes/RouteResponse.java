@@ -11,7 +11,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class RouteResponse {
     private Long id;
-    private String departurePoint;
-    private String destination;
+    private GeoLocation departurePoint;
+    private GeoLocation destination;
     private double distanceKm;
 }

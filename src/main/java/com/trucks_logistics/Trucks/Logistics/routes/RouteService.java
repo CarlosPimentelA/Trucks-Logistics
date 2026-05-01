@@ -18,7 +18,22 @@ public class RouteService implements IRouteService {
 
     @Override
     public RouteResponse addRoute(RouteRequest request) {
-        return RouteMapper.toDTO(routeRepository.save(RouteMapper.toEntity(request)));
+        Route route = new Route();
+        route.setDeparturePoint(request.getDeparturePoint());
+        route.setDestination(request.getDestination());
+
+        // Distance calculation
+        double lat1 = request.getDeparturePoint().latitude();
+        double lon1 = request.getDeparturePoint().longitude();
+
+        double lat2 = request.getDestination().latitude();
+        double lon2 = request.getDestination().longitude();
+
+        route.setDistanceKm(LocationUtils.locationDistance(lat1, lon1, lat2, lon2));
+
+        routeRepository.save(route);
+
+        return RouteMapper.toDTO(route);
     }
 
     @Override
@@ -53,7 +68,12 @@ public class RouteService implements IRouteService {
         }
 
         if (request.getDistanceKm() != null) {
-            routeUpdate.setDistanceKm(request.getDistanceKm());
+            double lat1 = request.getDeparturePoint().latitude();
+            double lon1 = request.getDeparturePoint().longitude();
+
+            double lat2 = request.getDestination().latitude();
+            double lon2 = request.getDestination().longitude();
+            routeUpdate.setDistanceKm(LocationUtils.locationDistance(lat1, lon1, lat2, lon2));
         }
         return RouteMapper.toDTO(routeUpdate);
     }
