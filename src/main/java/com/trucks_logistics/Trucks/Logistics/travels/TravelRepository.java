@@ -1,5 +1,6 @@
 package com.trucks_logistics.Trucks.Logistics.travels;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -12,4 +13,6 @@ public interface TravelRepository extends JpaRepository<Travel, Long> {
     List<Travel> findByDriver(Driver driver);
 
     List<Travel> findByTruck(Truck truck);
+
+    List<Travel> findByDepartureDateBetween(LocalDateTime start, LocalDateTime end);
 }

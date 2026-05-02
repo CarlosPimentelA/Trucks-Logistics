@@ -39,14 +39,7 @@ public class TravelService implements ITravelService {
         @Override
         public List<TravelResponse> findAll() {
                 List<Travel> travels = travelRepository.findAll();
-                return travels.stream()
-                                .map(t -> TravelMapper.toDTO(
-                                                t,
-                                                t.getLoads(),
-                                                t.getDriver(),
-                                                t.getTruck(),
-                                                t.getRoute()))
-                                .toList();
+                return TravelMapper.toDTOList(travels);
         }
 
         @Override
@@ -138,18 +131,7 @@ public class TravelService implements ITravelService {
 
                 List<Travel> travels = travelRepository.findByDriver(driver);
 
-                return travels.stream()
-                                .map(travel -> {
-                                        TravelDataBundle travelData = getEntities(travel.getId());
-
-                                        return TravelMapper.toDTO(
-                                                        travelData.travel(),
-                                                        travelData.loads(),
-                                                        travelData.driver(),
-                                                        travelData.truck(),
-                                                        travelData.route());
-                                })
-                                .toList();
+                return TravelMapper.toDTOList(travels);
         }
 
         @Override
@@ -159,18 +141,7 @@ public class TravelService implements ITravelService {
 
                 List<Travel> travels = travelRepository.findByTruck(truck);
 
-                return travels.stream()
-                                .map(travel -> {
-                                        TravelDataBundle travelData = getEntities(travel.getId());
-
-                                        return TravelMapper.toDTO(
-                                                        travelData.travel(),
-                                                        travelData.loads(),
-                                                        travelData.driver(),
-                                                        travelData.truck(),
-                                                        travelData.route());
-                                })
-                                .toList();
+                return TravelMapper.toDTOList(travels);
         }
 
         @Override
@@ -230,7 +201,8 @@ public class TravelService implements ITravelService {
 
         @Override
         public List<TravelResponse> findByDateRange(LocalDateTime start, LocalDateTime end) {
-                return null;
+                List<Travel> travels = travelRepository.findByDepartureDateBetween(start, end);
+                return TravelMapper.toDTOList(travels);
         }
 
         private double sumTravelLoadWeight(List<Load> loads) {
@@ -260,6 +232,12 @@ public class TravelService implements ITravelService {
         @Override
         public TravelResponse refreshEstimatedCost(Long id) {
                 TravelDataBundle travelData = getEntities(id);
+                TravelStatus travelStatus = travelData.travel().getTravelStatus();
+                if (travelStatus == TravelStatus.COMPLETADO || travelStatus == TravelStatus.EN_RUTA
+                                || travelStatus == TravelStatus.DESCARGANDO) {
+                        throw new IllegalStateException(
+                                        "No se puede refrescar el costo de un viaje finalizado o facturado");
+                }
                 double fuelPrice = travelData.travel().getCurrentFuelPrice().doubleValue();
                 double usedFuel = travelData.travel().getEstimatedUsedFuel();
                 BigDecimal total = BigDecimal.valueOf(fuelPrice * usedFuel);

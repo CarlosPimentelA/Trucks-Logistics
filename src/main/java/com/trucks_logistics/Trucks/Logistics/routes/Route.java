@@ -1,6 +1,9 @@
 package com.trucks_logistics.Trucks.Logistics.routes;
 
+import jakarta.persistence.AttributeOverride;
+import jakarta.persistence.AttributeOverrides;
 import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -22,9 +25,21 @@ public class Route {
     private Long id;
 
     @Column(nullable = false)
+    @Embedded
+    @AttributeOverrides({
+            @AttributeOverride(name = "name", column = @Column(name = "origin_name")),
+            @AttributeOverride(name = "latitude", column = @Column(name = "origin_lat")),
+            @AttributeOverride(name = "longitude", column = @Column(name = "origin_lon"))
+    })
     private GeoLocation departurePoint;
 
     @Column(nullable = false)
+    @Embedded
+    @AttributeOverrides({
+            @AttributeOverride(name = "name", column = @Column(name = "dest_name")),
+            @AttributeOverride(name = "latitude", column = @Column(name = "dest_lat")),
+            @AttributeOverride(name = "longitude", column = @Column(name = "dest_lon"))
+    })
     private GeoLocation destination;
 
     @Column(nullable = false)
