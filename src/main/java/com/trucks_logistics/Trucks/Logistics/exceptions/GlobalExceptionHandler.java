@@ -83,7 +83,7 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(OverCapacityException.class)
+    @ExceptionHandler(EmailDuplicated.class)
     public ResponseEntity<ErrorResponse> handleEmailDuplicated(EmailDuplicated ex) {
         ErrorResponse error = new ErrorResponse(
                 HttpStatus.BAD_REQUEST.value(),
