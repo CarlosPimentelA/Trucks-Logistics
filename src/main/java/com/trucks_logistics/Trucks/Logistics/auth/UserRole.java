@@ -1,4 +1,4 @@
-package com.trucks_logistics.Trucks.Logistics.users;
+package com.trucks_logistics.Trucks.Logistics.auth;
 
 public enum UserRole {
     ADMIN,
