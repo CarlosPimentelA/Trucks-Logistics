@@ -41,8 +41,13 @@ public class User {
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private UserRole role;
+
     @PrePersist
     protected void onCreate() {
+        this.role = UserRole.CLIENT;
         this.userStatus = UserStatus.PENDIENTE;
         this.createdAt = LocalDateTime.now();
     }
