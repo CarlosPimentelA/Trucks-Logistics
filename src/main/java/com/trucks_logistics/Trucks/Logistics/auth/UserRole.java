@@ -1,8 +1,8 @@
 package com.trucks_logistics.Trucks.Logistics.auth;
 
 public enum UserRole {
-    ADMIN,
-    DRIVER,
-    CLIENT,
-    DISPATCHER
+    ROLE_ADMIN,
+    ROLE_DRIVER,
+    ROLE_CLIENT,
+    ROLE_DISPATCHER
 }
