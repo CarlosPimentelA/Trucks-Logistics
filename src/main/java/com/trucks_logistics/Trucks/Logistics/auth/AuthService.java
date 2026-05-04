@@ -6,6 +6,7 @@ import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.trucks_logistics.Trucks.Logistics.email.EmailService;
 import com.trucks_logistics.Trucks.Logistics.exceptions.EmailDuplicated;
 
 import lombok.RequiredArgsConstructor;
@@ -19,6 +20,7 @@ public class AuthService implements IAuthService {
     private final PasswordEncoder passwordEncoder;
     private final AuthRepository authRepository;
     private final JwtService jwtService;
+    private final EmailService emailService;
 
     @Override
     public UserRegisterResponse createUser(UserRegisterRequest request) {
@@ -34,6 +36,7 @@ public class AuthService implements IAuthService {
         String hashedPassword = passwordEncoder.encode(request.password());
         user.setPassword(hashedPassword);
         user.setUsername(request.username());
+        emailService.enviarCodigoVerificacion(user.getEmail(), 12345);
         authRepository.save(user);
         return UserMapper.toDTO(user);
     }
