@@ -103,6 +103,11 @@
       <artifactId>spring-boot-starter-mail-test</artifactId>
       <scope>test</scope>
     </dependency>
+	<dependency>
+    <groupId>com.bucket4j</groupId>
+    <artifactId>bucket4j-core</artifactId>
+    <version>8.10.0</version>
+</dependency>
 	</dependencies>
 
 	<build>

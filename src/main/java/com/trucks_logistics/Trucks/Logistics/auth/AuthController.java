@@ -40,4 +40,10 @@ public class AuthController {
         authService.verifyEmail(token);
         return ResponseEntity.ok("Cuenta verificada exitosamente");
     }
+
+    @PostMapping("/verify/resend-verification")
+    public ResponseEntity<String> resendVerificationLink(@Valid @RequestBody ResendLinkRequest request) {
+        authService.resendVerificationLink(request.email());
+        return ResponseEntity.ok("Link reenviado exitosamente");
+    }
 }

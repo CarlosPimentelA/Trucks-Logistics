@@ -9,10 +9,14 @@ import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.trucks_logistics.Trucks.Logistics.email.EmailService;
 import com.trucks_logistics.Trucks.Logistics.exceptions.EmailDuplicated;
 import com.trucks_logistics.Trucks.Logistics.exceptions.InvalidTokenException;
+import com.trucks_logistics.Trucks.Logistics.exceptions.InvalidUserException;
+import com.trucks_logistics.Trucks.Logistics.exceptions.TooManyRequestException;
+import com.trucks_logistics.Trucks.Logistics.infra.email.EmailService;
+import com.trucks_logistics.Trucks.Logistics.infra.ratelimit.RateLimitService;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -29,6 +33,7 @@ public class AuthService implements IAuthService {
     private final JwtService jwtService;
     private final EmailService emailService;
     private final VerificationTokenRepository verificationTokenRepository;
+    private final RateLimitService rateLimitService;
 
     @Override
     public UserRegisterResponse createUser(UserRegisterRequest request) {
@@ -45,20 +50,7 @@ public class AuthService implements IAuthService {
         // Guardar user en DB
         authRepository.save(user);
 
-        // Crear token de verificacion
-        String code = UUID.randomUUID().toString().replace("-", "");
-
-        // Crear link de verificacion
-        VerificationToken verificationToken = new VerificationToken();
-        verificationToken.setToken(code);
-        verificationToken.setUser(user);
-        verificationToken.setExpiresAt(LocalDateTime.now().plusHours(24));
-
-        // Guardar verification token en DB
-        verificationTokenRepository.save(verificationToken);
-
-        // Crear link de verificacion
-        String verificationLink = verificationUrl + code;
+        String verificationLink = generateVerificationLink(user);
 
         // Email luego de persistir en DB por si hay errores
         emailService.enviarCodigoVerificacion(user.getEmail(), verificationLink);
@@ -103,5 +95,45 @@ public class AuthService implements IAuthService {
 
         // Eliminar el token de verificacion que se uso para evitar que se use otra vez
         verificationTokenRepository.delete(verificationToken);
+    }
+
+    @Override
+    public void resendVerificationLink(String email) {
+
+        if (!rateLimitService.allowResendVerification(email)) {
+            throw new TooManyRequestException("Numero maximo de peticiones alcanzado!");
+        }
+
+        User user = authRepository.findByEmail(email)
+                .orElseThrow(() -> new EntityNotFoundException("Usuario invalido"));
+
+        if (user.getUserStatus() != UserStatus.PENDIENTE) {
+            throw new InvalidUserException("Usuario no valido para esta peticion");
+        }
+
+        verificationTokenRepository.findByUserEmail(email)
+                .ifPresent(verificationTokenRepository::delete);
+
+        String verificationLink = generateVerificationLink(user);
+
+        emailService.enviarCodigoVerificacion(user.getEmail(), verificationLink);
+    }
+
+    private String generateVerificationLink(User user) {
+        // Crear token de verificacion
+        String code = UUID.randomUUID().toString().replace("-", "");
+
+        // Crear link de verificacion
+        VerificationToken verificationToken = new VerificationToken();
+        verificationToken.setToken(code);
+        verificationToken.setUser(user);
+        verificationToken.setExpiresAt(LocalDateTime.now().plusHours(24));
+
+        // Guardar verification token en DB
+        verificationTokenRepository.save(verificationToken);
+
+        // Crear link de verificacion
+        String verificationLink = verificationUrl + code;
+        return verificationLink;
     }
 }

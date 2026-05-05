@@ -1,4 +1,4 @@
-package com.trucks_logistics.Trucks.Logistics.config;
+package com.trucks_logistics.Trucks.Logistics.infra.security;
 
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
@@ -6,9 +6,7 @@ import javax.crypto.spec.SecretKeySpec;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -66,10 +64,13 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-    @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) {
-        return config.getAuthenticationManager();
-    }
+    // Lo eliminamos porque hace inyeccion de dependencias circular y daba error
+
+    // @Bean
+    // public AuthenticationManager
+    // authenticationManager(AuthenticationConfiguration config) {
+    // return config.getAuthenticationManager();
+    // }
 
     @Bean
     public JwtDecoder jwtDecoder() {
