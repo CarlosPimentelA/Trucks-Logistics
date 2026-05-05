@@ -1,5 +1,8 @@
 package com.trucks_logistics.Trucks.Logistics.auth;
 
+import java.time.LocalDateTime;
+import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
@@ -8,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import com.trucks_logistics.Trucks.Logistics.email.EmailService;
 import com.trucks_logistics.Trucks.Logistics.exceptions.EmailDuplicated;
+import com.trucks_logistics.Trucks.Logistics.exceptions.InvalidTokenException;
 
 import lombok.RequiredArgsConstructor;
 
@@ -17,10 +21,14 @@ public class AuthService implements IAuthService {
     @Value("${jwt.expiration-ms}")
     private long expirationMs;
 
+    @Value("${app.verification-url}")
+    private String verificationUrl;
+
     private final PasswordEncoder passwordEncoder;
     private final AuthRepository authRepository;
     private final JwtService jwtService;
     private final EmailService emailService;
+    private final VerificationTokenRepository verificationTokenRepository;
 
     @Override
     public UserRegisterResponse createUser(UserRegisterRequest request) {
@@ -28,16 +36,32 @@ public class AuthService implements IAuthService {
             throw new EmailDuplicated("El email ya está registrado");
         }
 
-        User user = new User();
-
-        // revisar si es asi
-        user.setEmail(request.email());
-        // encriptar
+        // Crear usuario
         String hashedPassword = passwordEncoder.encode(request.password());
+        User user = new User();
+        user.setEmail(request.email());
         user.setPassword(hashedPassword);
         user.setUsername(request.username());
-        emailService.enviarCodigoVerificacion(user.getEmail(), 12345);
+        // Guardar user en DB
         authRepository.save(user);
+
+        // Crear token de verificacion
+        String code = UUID.randomUUID().toString().replace("-", "");
+
+        // Crear link de verificacion
+        VerificationToken verificationToken = new VerificationToken();
+        verificationToken.setToken(code);
+        verificationToken.setUser(user);
+        verificationToken.setExpiresAt(LocalDateTime.now().plusHours(24));
+
+        // Guardar verification token en DB
+        verificationTokenRepository.save(verificationToken);
+
+        // Crear link de verificacion
+        String verificationLink = verificationUrl + code;
+
+        // Email luego de persistir en DB por si hay errores
+        emailService.enviarCodigoVerificacion(user.getEmail(), verificationLink);
         return UserMapper.toDTO(user);
     }
 
@@ -60,5 +84,24 @@ public class AuthService implements IAuthService {
 
         String accessToken = jwtService.generateToken(user);
         return new UserLoginResponse(accessToken, "Bearer", expirationMs / 1000);
+    }
+
+    @Override
+    public void verifyEmail(String token) {
+        VerificationToken verificationToken = verificationTokenRepository.findByToken(token)
+                .orElseThrow(() -> new InvalidTokenException("Token invalido"));
+
+        if (LocalDateTime.now().isAfter(verificationToken.getExpiresAt())) {
+            verificationTokenRepository.delete(verificationToken);
+            throw new InvalidTokenException("Token expirado, solicita uno nuevo");
+        }
+
+        // Obtener usuario del token de validacion y activar la cuenta
+        User user = verificationToken.getUser();
+        user.setUserStatus(UserStatus.ACTIVO);
+        authRepository.save(user);
+
+        // Eliminar el token de verificacion que se uso para evitar que se use otra vez
+        verificationTokenRepository.delete(verificationToken);
     }
 }
