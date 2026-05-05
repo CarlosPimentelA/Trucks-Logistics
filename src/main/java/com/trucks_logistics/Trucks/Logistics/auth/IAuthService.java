@@ -6,4 +6,6 @@ public interface IAuthService {
     UserLoginResponse loginUser(UserLoginRequest request);
 
     void verifyEmail(String token);
+
+    void resendVerificationLink(String email);
 }
