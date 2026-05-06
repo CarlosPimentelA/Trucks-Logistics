@@ -9,7 +9,7 @@ Sistema de trazabilidad logística para la gestión de viajes, conductores, cami
 - **Java 21**
 - **Spring Boot 3**
 - **Spring Security 7** con OAuth2 Resource Server
-- **JWT** (access token + refresh token)
+- **JWT**
 - **PostgreSQL**
 - **Hibernate / JPA**
 - **Lombok**
@@ -138,24 +138,6 @@ Con la aplicación corriendo, accede a Swagger UI en:
 ```
 http://localhost:8080/swagger-ui/index.html
 ```
-
----
-
-## Decisiones de diseño documentadas
-
-### Refresh token en body
-El refresh token se envía y recibe en el body del request en lugar de una HttpOnly cookie. Decisión tomada para mantener un contrato de API único que funcione tanto para el cliente web (Next.js) como para el cliente móvil (React Native + Expo), donde el manejo de cookies no es nativo.
-
-El cliente es responsable de almacenar el refresh token de forma segura:
-- **Web**: memoria o cookie manejada desde el frontend
-- **Mobile**: `expo-secure-store`
-
-### Autenticación manual sin `AuthenticationManager`
-El login se implementa con verificación manual de credenciales (`passwordEncoder.matches()`) en lugar de delegar a Spring Security. Esto evita la necesidad de implementar `UserDetailsService` y simplifica la arquitectura para un sistema stateless con JWT.
-
-### Rate limiting in-memory con Bucket4j
-El rate limiting del endpoint de reenvío de verificación usa Bucket4j con `ConcurrentHashMap`. Solución adecuada para una instancia única. Documentado para migración futura a Redis + Bucket4j distribuido cuando se escale horizontalmente.
-
 ---
 
 ## Instalación y ejecución local
@@ -171,7 +153,7 @@ cd trazo
 ./mvnw spring-boot:run
 ```
 
-Requiere Java 21 y PostgreSQL corriendo localmente.
+Requiere Java 17 y PostgreSQL corriendo localmente.
 
 ---
 
