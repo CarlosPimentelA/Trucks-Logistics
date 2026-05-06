@@ -9,6 +9,10 @@ import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.trucks_logistics.Trucks.Logistics.auth.token.RefreshToken;
+import com.trucks_logistics.Trucks.Logistics.auth.token.RefreshTokenService;
+import com.trucks_logistics.Trucks.Logistics.auth.token.VerificationToken;
+import com.trucks_logistics.Trucks.Logistics.auth.token.VerificationTokenRepository;
 import com.trucks_logistics.Trucks.Logistics.exceptions.EmailDuplicated;
 import com.trucks_logistics.Trucks.Logistics.exceptions.InvalidTokenException;
 import com.trucks_logistics.Trucks.Logistics.exceptions.InvalidUserException;
@@ -34,6 +38,7 @@ public class AuthService implements IAuthService {
     private final EmailService emailService;
     private final VerificationTokenRepository verificationTokenRepository;
     private final RateLimitService rateLimitService;
+    private final RefreshTokenService refreshTokenService;
 
     @Override
     public UserRegisterResponse createUser(UserRegisterRequest request) {
@@ -58,7 +63,7 @@ public class AuthService implements IAuthService {
     }
 
     @Override
-    public UserLoginResponse loginUser(UserLoginRequest request) {
+    public AuthTokenResponse loginUser(UserLoginRequest request) {
         User user = authRepository.findByEmail(request.email())
                 .orElseThrow(() -> new BadCredentialsException("Credenciales invalidas"));
 
@@ -75,7 +80,8 @@ public class AuthService implements IAuthService {
         }
 
         String accessToken = jwtService.generateToken(user);
-        return new UserLoginResponse(accessToken, "Bearer", expirationMs / 1000);
+        RefreshToken refreshToken = refreshTokenService.generateToken(user);
+        return new AuthTokenResponse(accessToken, "Bearer", expirationMs / 1000, refreshToken.getToken());
     }
 
     @Override
